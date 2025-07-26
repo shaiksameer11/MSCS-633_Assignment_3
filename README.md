@@ -50,8 +50,8 @@ The chatbot uses machine learning to understand what users say and give good res
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/django-chatterbot-project.git
-   cd django-chatterbot-project
+   git clone https://github.com/shaiksameer11/MSCS-633_Assignment_3.git
+   cd MSCS-633_Assignment_3
    ```
 
 2. **Install dependencies**
