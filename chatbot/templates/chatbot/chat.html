@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with My Bot</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chatbot/css/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <header class="chat-header">
+        <h1>🤖 Django ChatBot</h1>
+        <p>Powered by ChatterBot and Django</p>
+    </header>
+
+    <div class="chat-container">
+        <div id="chat-messages" class="chat-messages">
+            <!-- Welcome message -->
+            <div class="message bot-message">
+                <div class="message-content">
+                    <strong>Bot:</strong> Hello! I'm a Django chatbot. How can I help you today?
+                </div>
+                <div class="message-time"></div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typing-indicator" style="display: none;">
+            <div class="message bot-message">
+                <div class="message-content">
+                    <strong>Bot:</strong> <span class="typing-dots">
+                            <span>.</span><span>.</span><span>.</span>
+                        </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-input-container">
+        <div class="input-group">
+            <input
+                    type="text"
+                    id="user-input"
+                    placeholder="Type your message here..."
+                    maxlength="500"
+                    autocomplete="off"
+            >
+            <button id="send-button" onclick="sendMessage()">
+                <span class="send-icon">📤</span>
+                Send
+            </button>
+        </div>
+        <div class="input-info">
+            <small>Press Enter to send • <a href="{% url 'chatbot:about' %}">About</a></small>
+        </div>
+    </div>
+</div>
+
+<!-- Loading overlay -->
+<div id="loading-overlay" class="loading-overlay" style="display: none;">
+    <div class="loading-spinner"></div>
+</div>
+
+<script src="{% static 'chatbot/js/chat.js' %}"></script>
+<script>
+    // Initialize chat when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Focus on input field
+        document.getElementById('user-input').focus();
+
+        // Add enter key listener
+        document.getElementById('user-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Add current time to welcome message
+        const timeElements = document.querySelectorAll('.message-time');
+        timeElements.forEach(element => {
+            element.textContent = getCurrentTime();
+        });
+    });
+
+    function getCurrentTime() {
+        const now = new Date();
+        return now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }
+
+    function sendMessage() {
+        const userInput = document.getElementById('user-input');
+        const message = userInput.value.trim();
+
+        // Check if message is empty
+        if (message === '') {
+            userInput.focus();
+            return;
+        }
+
+        // Disable input and button while processing
+        userInput.disabled = true;
+        document.getElementById('send-button').disabled = true;
+
+        // Show user message
+        addMessage('User', message, 'user-message');
+
+        // Clear input
+        userInput.value = '';
+
+        // Show typing indicator
+        showTypingIndicator();
+
+        // Get bot response
+        fetch(`/get-response/?message=${encodeURIComponent(message)}`)
+            .then(response => response.json())
+            .then(data => {
+                // Hide typing indicator
+                hideTypingIndicator();
+
+                if (data.bot_response) {
+                    addMessage('Bot', data.bot_response, 'bot-message');
+                } else if (data.error) {
+                    addMessage('Bot', 'Sorry, I encountered an error. Please try again.', 'bot-message error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                hideTypingIndicator();
+                addMessage('Bot', 'Sorry, I had trouble connecting. Please check your internet and try again.', 'bot-message error');
+            })
+            .finally(() => {
+                // Re-enable input and button
+                userInput.disabled = false;
+                document.getElementById('send-button').disabled = false;
+                userInput.focus();
+            });
+    }
+
+    function addMessage(sender, message, cssClass) {
+        const chatMessages = document.getElementById('chat-messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${cssClass}`;
+
+        const currentTime = getCurrentTime();
+        messageDiv.innerHTML = `
+                <div class="message-content">
+                    <strong>${sender}:</strong> ${escapeHtml(message)}
+                </div>
+                <div class="message-time">${currentTime}</div>
+            `;
+
+        chatMessages.appendChild(messageDiv);
+
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Add fade-in animation
+        messageDiv.style.opacity = '0';
+        messageDiv.style.transform = 'translateY(10px)';
+        setTimeout(() => {
+            messageDiv.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            messageDiv.style.opacity = '1';
+            messageDiv.style.transform = 'translateY(0)';
+        }, 10);
+    }
+
+    function showTypingIndicator() {
+        document.getElementById('typing-indicator').style.display = 'block';
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function hideTypingIndicator() {
+        document.getElementById('typing-indicator').style.display = 'none';
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Auto-resize chat container based on window size
+    function resizeChat() {
+        const container = document.querySelector('.container');
+        const header = document.querySelector('.chat-header');
+        const inputContainer = document.querySelector('.chat-input-container');
+        const chatContainer = document.querySelector('.chat-container');
+
+        const headerHeight = header.offsetHeight;
+        const inputHeight = inputContainer.offsetHeight;
+        const availableHeight = window.innerHeight - headerHeight - inputHeight - 40; // 40px for margins
+
+        chatContainer.style.height = Math.max(400, availableHeight) + 'px';
+    }
+
+    // Resize on load and window resize
+    window.addEventListener('load', resizeChat);
+    window.addEventListener('resize', resizeChat);
+</script>
+</body>
+</html>

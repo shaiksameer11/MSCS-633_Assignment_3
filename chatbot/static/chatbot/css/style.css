@@ -1,0 +1,221 @@
+/* Django ChatBot Styles */
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+/* Container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.chat-header {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 3px solid #e5e7eb;
+}
+
+.chat-header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.chat-header p {
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+/* Chat container */
+.chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #f8fafc;
+    scroll-behavior: smooth;
+}
+
+/* Messages */
+.message {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.message-content {
+    padding: 12px 16px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    line-height: 1.4;
+    position: relative;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 4px;
+    opacity: 0.7;
+}
+
+/* User messages */
+.user-message {
+    align-items: flex-end;
+}
+
+.user-message .message-content {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 6px;
+}
+
+.user-message .message-time {
+    text-align: right;
+    color: #9ca3af;
+}
+
+/* Bot messages */
+.bot-message {
+    align-items: flex-start;
+}
+
+.bot-message .message-content {
+    background: white;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    border-bottom-left-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.bot-message .message-time {
+    text-align: left;
+}
+
+/* Error messages */
+.error .message-content {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
+/* Typing indicator */
+.typing-indicator {
+    margin: 15px 0;
+}
+
+.typing-dots {
+    display: inline-block;
+}
+
+.typing-dots span {
+    animation: typingDots 1.4s infinite;
+    opacity: 0;
+}
+
+.typing-dots span:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes typingDots {
+    0%, 20% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Input container */
+.chat-input-container {
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 20px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+#user-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 25px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+    background: #f9fafb;
+}
+
+#user-input:focus {
+    border-color: #3b82f6;
+    background: white;
+}
+
+#user-input:disabled {
+    background: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+#send-button {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 100px;
+}
+
+#send-button:hover:not(:disable
