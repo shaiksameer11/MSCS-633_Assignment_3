@@ -11,8 +11,6 @@ A simple conversational AI chatbot built with Django and ChatterBot that works b
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
-- [Screenshots](#screenshots)
-- [References](#references)
 
 ## 🤖 About the Project
 
@@ -180,17 +178,3 @@ django-chatterbot-project/
 └── tests/                      # Test files
     └── test_chatbot.py        # Chatbot tests
 ```
-
-## Screenshots
-
-### Web Interface
-Place your web interface screenshot here: `screenshots/web_interface.png`
-
-### Terminal Interface
-Place your terminal interface screenshot here: `screenshots/terminal_interface.png`
-
-## 📚 References
-
-1. ChatterBot Documentation. (2025). *About ChatterBot*. Retrieved from https://docs.chatterbot.us/
-2. StudyGyaan. (2024). *Building Python Django Chatbot with Chatterbot*. Retrieved from https://studygyaan.com/django/building-python-django-chatbot-with-chatterbot
-3. Real Python. (2023). *ChatterBot: Build a Chatbot With Python*. Retrieved from https://realpython.com/build-a-chatbot-python-chatterbot/
